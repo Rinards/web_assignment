@@ -14,8 +14,16 @@
       </div>
       <div class="mb-5 mr-3 self-end">
          @if (Auth::user())
-         <a href="#" class="p-3 bg-green-400 rounded-md text-dark">Add to list</a>
-         <a href="#" class="p-3 bg-red-400 rounded-md text-dark">Remove</a>
+         
+         <form action="{{ route('listing.create', 'movie') }}" method='post'>
+            @csrf
+            <button class="p-3 bg-green-400 rounded-md text-dark"name="add" value="{{ $movie['id'] }}">Add to list</button>
+         </form>
+
+         <form action="/" method='post'>
+            @csrf
+            <button class="p-3 bg-red-400 rounded-md text-dark" name="add" value="{{ $movie['id'] }}">Remove</button>
+         </form>
          @else
          <p>Log in or register to add to your list.</p>
          @endif

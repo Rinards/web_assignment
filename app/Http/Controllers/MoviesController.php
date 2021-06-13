@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MovieList;
+use App\Models\MovieListing;
+use Attribute;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class MoviesController extends Controller
@@ -51,6 +55,16 @@ class MoviesController extends Controller
     {
         $movie = Http::withToken(config('services.tmdb.token'))->get('https://api.themoviedb.org/3/movie/'.$id)->json();
         dump($movie);
+        $isSaved = false;
+        if(Auth::user()){
+            $user_id = Auth::user()->id;
+            if ($listing = MovieListing::where('movie_id', '=', $id)->get()){
+                dump($listing);
+            } 
+            $isSaved = true;
+        } 
+
+        dump($isSaved);
         return view('movies_show', compact('movie'));
     }
 

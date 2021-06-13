@@ -4,7 +4,7 @@
                 <a class="nav-link text-light" href='/home'>Movies & TV Shows</a>
             </div>
             <div class="nav-item">
-                <a class="nav-link text-light" href="/list">My List</a>
+                <a class="nav-link text-light" href="{{ route('list', Auth::user()->id) }}">My List</a>
             </div>
     </div>
 </nav>

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\MovieListing;
+use App\Http\Controllers\MovieListController;
+use Illuminate\Support\Facades\Http;
 
 class MovieListingController extends Controller
 {
@@ -21,9 +24,22 @@ class MovieListingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $type = $request->type;
+        $movie_id = $request->input('add');
+        $movie = Http::withToken(config('services.tmdb.token'))->get('https://api.themoviedb.org/3/' . $type .'/' . $movie_id)->json();
+        $poster_path = $movie['poster_path'];
+        if($type === 'tv') $name = $movie['name'];
+        if($type === 'movie') $name = $movie['title'];
+        $listing = MovieListing::create([
+            'type' => $type,
+            'name' => $name,
+            'movie_id' => $movie_id,
+            'poster_path' => $poster_path
+        ]);
+        // return redirect()->action('MovieListController@create', ['listing_id' => $listing->id]);
+        return redirect(route('list.create', $listing->id));
     }
 
     /**

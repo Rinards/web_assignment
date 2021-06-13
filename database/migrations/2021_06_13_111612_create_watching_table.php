@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateListingTable extends Migration
+class CreateWatchingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateListingTable extends Migration
      */
     public function up()
     {
-        Schema::create('listing', function (Blueprint $table) {
-            $table->id();
+        Schema::create('watching', function (Blueprint $table) {
             $table->timestamps();
-            $table->integer('list_id');
-            $table->integer('movie_id');
-            $table->string('type');
-            $table->integer('season')->nullable();
-            $table->integer('episode')->nullable();
+            $table->integer('listing_id');
+            $table->integer('season');
+            $table->integer('episdoe');
         });
     }
 
@@ -31,6 +28,6 @@ class CreateListingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('listing');
+        Schema::dropIfExists('watching');
     }
 }

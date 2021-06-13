@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\MoviesController;
 use App\Http\Controllers\TvController;
+use App\Http\Controllers\MovieListController;
+use App\Http\Controllers\MovieListingController;
+use App\Models\MovieListing;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -25,22 +28,23 @@ Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('re
 Route::post('register', 'Auth\RegisterController@register');
 
 
-Route::get('/list', function () {
-    return view('list');
-})->name('list');
-
-
-
-Route::get('movies/{page?}', [MoviesController::class, 'index'])->name('movies');
-Route::get('/movie/{id}', [MoviesController::class, 'show']);
-Route::get('tv_shows/{page?}', [TvController::class, 'index'])->name('tv_shows');
-Route::get('/tv_show/{id}', [TvController::class, 'show']);
 
 Route::get('/', function () {
     return redirect()->route('movies');
 });
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth'])->name('dashboard');
+Route::get('movies/{page?}', [MoviesController::class, 'index'])->name('movies');
+Route::get('movie/{id}', [MoviesController::class, 'show']);
+Route::get('tv_shows/{page?}', [TvController::class, 'index'])->name('tv_shows');
+Route::get('tv_show/{id}', [TvController::class, 'show']);
+
+
+
+Route::get('list', [MovieListController::class, 'index'])->name('list');
+
+
+
+Route::get('list/create/{listing_id}', [MovieListController::class, 'create'])->name('list.create');
+Route::post('listing/create/{type}', [MovieListingController::class, 'create'])->name('listing.create');
+
 
 require __DIR__.'/auth.php';

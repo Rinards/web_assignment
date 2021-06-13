@@ -3,7 +3,7 @@
 
 <div class="d-flex flex-wrap justify-content-between">
 @foreach ($tvList as $tvShow)
-    <div class="p-3 m-1 border rounded d-flex flex-col w-1/5 justify-content-between align-items-center">
+    <div class="p-3 m-1 border rounded d-flex flex-col w-1/5 justify-content-between align-items-center shadow-md hover:shadow-xl">
 
         <div class="w-30 d-flex">
             <a href="/{{ 'tv_show/'.$tvShow['id']}}">
