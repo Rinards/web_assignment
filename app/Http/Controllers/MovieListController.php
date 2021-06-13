@@ -30,12 +30,11 @@ class MovieListController extends Controller
                 $data['list'][$i]['name'] = $movie->name;
                 $data['list'][$i]['status'] = $result->status;
                 $data['list'][$i]['poster_path'] = $movie->poster_path;
+                $data['list'][$i]['id'] = $listing_id;
                 $i++;
             }
 
         }
-
-
         return view('list', compact('data'));
     }
 

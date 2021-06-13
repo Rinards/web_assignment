@@ -20,5 +20,4 @@
 
 <x-paginator :type='$type' :page='$page'/>
 
-
 @endsection

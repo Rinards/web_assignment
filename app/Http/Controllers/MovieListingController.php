@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\MovieListing;
+use App\Models\MovieList;
 use App\Http\Controllers\MovieListController;
 use Illuminate\Support\Facades\Http;
+use PhpParser\NodeVisitor\FirstFindingVisitor;
 
 class MovieListingController extends Controller
 {
@@ -39,6 +41,9 @@ class MovieListingController extends Controller
             'poster_path' => $poster_path
         ]);
         // return redirect()->action('MovieListController@create', ['listing_id' => $listing->id]);
+
+        // TODO IF TYPE === TV REDIRECT TO WATCHIING.CREATE WHICH REDIRECTS TO LIST.CREATE
+
         return redirect(route('list.create', $listing->id));
     }
 
@@ -61,7 +66,12 @@ class MovieListingController extends Controller
      */
     public function show($id)
     {
-        //
+        $listing = MovieListing::where('id','=', $id)->first();
+        $type = $listing->type;
+        $movie_id = $listing->movie_id;
+        $movie = Http::withToken(config('services.tmdb.token'))->get('https://api.themoviedb.org/3/' . $type . '/' . $movie_id)->json();
+        $status = MovieList::select('status')->where('movie_listing_id', '=', $id)->first()->status;
+        return view('listing_show', compact('listing', 'movie', 'status'));
     }
 
     /**
@@ -95,6 +105,8 @@ class MovieListingController extends Controller
      */
     public function destroy($id)
     {
-        //
+        MovieList::where('movie_listing_id', '=', $id)->delete();
+        MovieListing::find($id)->delete();
+        return redirect()->action([MovieListController::class, 'index']);
     }
 }

@@ -41,10 +41,14 @@ Route::get('tv_show/{id}', [TvController::class, 'show']);
 
 Route::get('list', [MovieListController::class, 'index'])->name('list');
 
-
-
 Route::get('list/create/{listing_id}', [MovieListController::class, 'create'])->name('list.create');
+
+Route::get('listing/{listing_id}', [MovieListingController::class, 'show']);
+
 Route::post('listing/create/{type}', [MovieListingController::class, 'create'])->name('listing.create');
 
+Route::post('listing/destroy/{listing_id}', [MovieListingController::class, 'destroy'])->name('listing.destroy');
+
+Route::post('watching/create/{listing_id}', [WatchingController::class, 'create'])->name('watching.create');
 
 require __DIR__.'/auth.php';

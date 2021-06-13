@@ -3,24 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Auth;
-use App\Models\MovieList;
-use App\Models\MovieListing;
 
-class TvController extends Controller
+class WatchingController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($page=1)
+    public function index()
     {
-        $type = 'movies';
-        $tvList = Http::withToken(config('services.tmdb.token'))->get('https://api.themoviedb.org/3/tv/popular?page=' . ($page))->json()['results'];
-        dump($tvList);
-        return view('tv_index', compact('page', 'type', 'tvList'));
+        //
     }
 
     /**
@@ -30,7 +23,7 @@ class TvController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -52,21 +45,7 @@ class TvController extends Controller
      */
     public function show($id)
     {
-        $tvShow = Http::withToken(config('services.tmdb.token'))->get('https://api.themoviedb.org/3/tv/' . $id)->json();
-        dump($tvShow);
-        $isSaved = false;
-        if (Auth::user()) {
-            $user_id = Auth::user()->id;
-
-            $listings = MovieList::where('user_id', '=', $user_id)->get();
-            foreach ($listings as $listing) {
-                if (MovieListing::where('id', '=', $listing->movie_listing_id)->where('movie_id', '=', $tvShow['id'])->exists()) $isSaved = true;
-            }
-
-            dump($listings);
-            dump($isSaved);
-        } 
-        return view('tv_show', compact('tvShow', 'isSaved'));
+        //
     }
 
     /**

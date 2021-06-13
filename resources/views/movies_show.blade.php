@@ -12,23 +12,23 @@
          <p>Release date: {{ \Carbon\Carbon::parse($movie['release_date'])->format('M d, Y') }}</p>
          <p>Average score: {{ $movie['vote_average']*10}}%</p>
       </div>
-      <div class="mb-5 mr-3 self-end">
+      <div class="mb-5 mr-3 self-end d-flex">
          @if (Auth::user())
-         
-         <form action="{{ route('listing.create', 'movie') }}" method='post'>
-            @csrf
-            <button class="p-3 bg-green-400 rounded-md text-dark"name="add" value="{{ $movie['id'] }}">Add to list</button>
-         </form>
-
-         <form action="/" method='post'>
-            @csrf
-            <button class="p-3 bg-red-400 rounded-md text-dark" name="add" value="{{ $movie['id'] }}">Remove</button>
-         </form>
+            @if ($isSaved)
+            <p class="font-bold">Added to your List</p>
+            @else
+            <form action="{{ route('listing.create', 'movie') }}" method='post' class="ml-3">
+               @csrf
+               <button class="p-3 bg-green-400 rounded-md text-dark"name="add" value="{{ $movie['id'] }}">Add to list</button>
+            </form>
+            @endif
+         <?php 
+         //TODO if user added to list display "Added to list"
+         ?>
          @else
          <p>Log in or register to add to your list.</p>
          @endif
       </div>
-
    </div>
 </div>
 

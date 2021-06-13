@@ -58,14 +58,17 @@ class MoviesController extends Controller
         $isSaved = false;
         if(Auth::user()){
             $user_id = Auth::user()->id;
-            if ($listing = MovieListing::where('movie_id', '=', $id)->get()){
-                dump($listing);
-            } 
-            $isSaved = true;
-        } 
 
-        dump($isSaved);
-        return view('movies_show', compact('movie'));
+            $listings = MovieList::where('user_id', '=', $user_id)->get();
+            foreach($listings as $listing){
+                if(MovieListing::where('id','=', $listing->movie_listing_id)->where('movie_id', '=', $movie['id'])->exists())
+                $isSaved = true;
+            }
+
+            dump($listings);
+            dump($isSaved);
+        } 
+        return view('movies_show', compact('movie', 'isSaved'));
     }
 
     /**

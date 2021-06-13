@@ -14,15 +14,14 @@
       </div>
       <div class="mb-5 mr-3 self-end">
          @if (Auth::user())
-         <form action="{{ route('listing.create', 'tv') }}" method='post'>
-             @csrf
-            <button class="p-3 bg-green-400 rounded-md text-dark"name="add" value="{{ $tvShow['id'] }}">Add to list</button>
-         </form>
-
-         <form action="/" method='post'>
-            @csrf
-            <button class="p-3 bg-red-400 rounded-md text-dark" name="add" value="{{ $tvShow['id'] }}">Remove</button>
-         </form>
+            @if ($isSaved)
+            <p>Added to your List</p>
+            @else
+            <form action="{{ route('listing.create', 'tv') }}" method='post'>
+               @csrf
+               <button class="p-3 bg-green-400 rounded-md text-dark"name="add" value="{{ $tvShow['id'] }}">Add to list</button>
+            </form>
+            @endif
          @else
          <p>Log in or register to add to your list.</p>
          @endif
