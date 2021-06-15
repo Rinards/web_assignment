@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\MovieListing;
+use App\Models\Watching;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 class WatchingController extends Controller
 {
@@ -21,9 +25,15 @@ class WatchingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        
+        $listing_id = $request->listing_id;
+        $listing = MovieListing::find($listing_id);
+        DB::table('movie_lists')->where('movie_listing_id', '=', $listing_id)->limit(1)->update(array('status' => 'watching'));
+        $watching = new Watching();
+        $watching->movie_listing_id = $listing_id;
+        $listing->watching()->save($watching);
+        return redirect(route('listing.show', $listing_id));
     }
 
     /**
@@ -45,7 +55,9 @@ class WatchingController extends Controller
      */
     public function show($id)
     {
-        //
+        $listing = MovieListing::find($id);
+        $movie = Http::withToken(config('services.tmdb.token'))->get('https://api.themoviedb.org/3/tv/' . $listing->movie_id)->json();
+        return view('watching', compact('movie', 'listing'));
     }
 
     /**
@@ -54,9 +66,11 @@ class WatchingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, Request $request)
     {
-        //
+        $newData = explode('-', $request->input('s-e'));
+        DB::table('watchings')->where('movie_listing_id', '=', $id)->limit(1)->update(array('season' => $newData[0],  'episode' => $newData[1]));
+        return redirect(route('listing.show', $id));
     }
 
     /**
@@ -79,6 +93,7 @@ class WatchingController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Watching::where('movie_listing_id', '=', $id)->delete();
+        return redirect(route('listing.show', $id));
     }
 }

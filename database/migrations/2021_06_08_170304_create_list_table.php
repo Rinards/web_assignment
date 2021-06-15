@@ -15,8 +15,8 @@ class CreateListTable extends Migration
     {
         Schema::create('movie_lists', function (Blueprint $table) {
             $table->timestamps();
-            $table->integer('user_id');
-            $table->foreignId('movie_listing_id')->references('id')->on('movie_listings')->onDelete('cascade')->unique()->unsigned();
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade')->unsigned();
+            $table->foreignId('movie_listing_id')->references('id')->on('movie_listings')->onDelete('cascade')->unsigned();
             $table->string('status')->default('watchlisted');
             
         });
@@ -33,6 +33,8 @@ class CreateListTable extends Migration
         Schema::table('movie_lists', function(Blueprint $table) {
             $table->dropForeign('movie_lists_movie_listing_id_foreign');
             $table->dropColumn('movie_listing_id');
+            $table->dropForeign('movie_lists_user_id_foreign');
+            $table->dropColumn('user_id');
         });
         Schema::dropIfExists('movie_lists');
     }

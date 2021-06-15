@@ -40,6 +40,9 @@
                             <x-dropdown-link :href="route('list')">
                                 My List
                             </x-dropdown-link>
+                            <x-dropdown-link :href="route('users')">
+                                Manage Users
+                            </x-dropdown-link>
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">

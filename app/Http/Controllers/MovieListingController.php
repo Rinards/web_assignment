@@ -4,23 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\MovieListing;
-use App\Models\MovieList;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\MovieListController;
 use Illuminate\Support\Facades\Http;
 use PhpParser\NodeVisitor\FirstFindingVisitor;
 
 class MovieListingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -40,22 +30,7 @@ class MovieListingController extends Controller
             'movie_id' => $movie_id,
             'poster_path' => $poster_path
         ]);
-        // return redirect()->action('MovieListController@create', ['listing_id' => $listing->id]);
-
-        // TODO IF TYPE === TV REDIRECT TO WATCHIING.CREATE WHICH REDIRECTS TO LIST.CREATE
-
         return redirect(route('list.create', $listing->id));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -70,31 +45,13 @@ class MovieListingController extends Controller
         $type = $listing->type;
         $movie_id = $listing->movie_id;
         $movie = Http::withToken(config('services.tmdb.token'))->get('https://api.themoviedb.org/3/' . $type . '/' . $movie_id)->json();
-        $status = MovieList::select('status')->where('movie_listing_id', '=', $id)->first()->status;
+        if($type == 'tv'){
+            $watching = DB::table('watchings')->select('episode', 'season')->where('movie_listing_id', '=', $id)->first();
+            $listing->watching = $watching;
+        }
+
+        $status = $listing->movieLists()->select('status')->where('movie_listing_id', '=', $id)->first()->status;
         return view('listing_show', compact('listing', 'movie', 'status'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**
@@ -105,8 +62,13 @@ class MovieListingController extends Controller
      */
     public function destroy($id)
     {
-        MovieList::where('movie_listing_id', '=', $id)->delete();
-        MovieListing::find($id)->delete();
+        $listing = MovieListing::find($id);
+        $type = $listing->type;
+        if($type == 'tv'){
+            $listing->watching()->delete();
+        }
+        $listing->movieLists()->delete();
+        $listing->delete();
         return redirect()->action([MovieListController::class, 'index']);
     }
 }

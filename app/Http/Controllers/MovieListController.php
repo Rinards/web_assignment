@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\MovieList;
 use App\Models\MovieListing;
+use App\Http\Controllers\MovieListingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -58,28 +58,6 @@ class MovieListController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -87,29 +65,9 @@ class MovieListController extends Controller
      */
     public function edit($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        DB::table('movie_lists')->where('movie_listing_id', '=', $id)->limit(1)->update(array('status' => 'watched'));
+        $type = MovieListing::select('type')->where('id', '=', $id)->first()->type;
+        if ($type == 'tv') return redirect(route('watching.destroy', $id));
+        return redirect()->action([MovieListingController::class, 'show'], $id);
     }
 }

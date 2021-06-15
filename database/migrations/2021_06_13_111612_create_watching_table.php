@@ -13,11 +13,11 @@ class CreateWatchingTable extends Migration
      */
     public function up()
     {
-        Schema::create('watching', function (Blueprint $table) {
+        Schema::create('watchings', function (Blueprint $table) {
             $table->timestamps();
-            $table->integer('listing_id');
-            $table->integer('season');
-            $table->integer('episdoe');
+            $table->foreignId('movie_listing_id')->references('id')->on('movie_listings')->onDelete('cascade')->unique()->unsigned();
+            $table->integer('season')->default(1)->unsigned();
+            $table->integer('episode')->default(1)->unsigned();
         });
     }
 
@@ -28,6 +28,10 @@ class CreateWatchingTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('watching');
+        Schema::table('watchings', function (Blueprint $table) {
+            $table->dropForeign('watchings_movie_listing_id_foreign');
+            $table->dropColumn('movie_listing_id');
+        });
+        Schema::dropIfExists('watchings');
     }
 }

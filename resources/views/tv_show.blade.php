@@ -26,7 +26,6 @@
          <p>Log in or register to add to your list.</p>
          @endif
       </div>
-
    </div>
 </div>
 

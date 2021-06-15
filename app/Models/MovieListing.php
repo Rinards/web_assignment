@@ -19,4 +19,8 @@ class MovieListing extends Model
     public function movieLists(){
         return $this->hasOne(MovieList::class);
     }
+
+    public function watching(){
+        return $this->hasOne(Watching::class);
+    }
 }
