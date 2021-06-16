@@ -15,7 +15,7 @@
       <div class="mb-5 mr-3 self-end">
          @if (Auth::user())
             @if ($isSaved)
-            <p>Added to your List</p>
+            <p class="font-bold">Added to your <a href="/list" class="text-dark underline">List</a></p>
             @else
             <form action="{{ route('listing.create', 'tv') }}" method='post'>
                @csrf

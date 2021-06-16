@@ -40,10 +40,7 @@
                Episode: {{ $listing->watching->episode }}
             </p>
          @endif
-
-
       </div>
-
       <div class="mb-5 mr-3 self-end d-flex">
          @if ($status === 'watchlisted' && $listing->type === 'tv')
             <form action="{{ route('watching.create', $listing->id) }}" method='post' class="ml-3">

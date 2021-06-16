@@ -16,6 +16,7 @@
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-400">
@@ -23,7 +24,7 @@
 
             <!-- Page Content -->
             <main>
-                <div class="bg-white max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 my-10">
+                <div class="bg-white max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 my-10 shadow-xl">
                 @yield('content')
                 {{-- {{ $slot ?? ''}} --}}
                 </div>

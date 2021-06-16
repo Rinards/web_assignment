@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,32 +19,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('users', compact('users'));
+        if (Gate::allows('is-admin')){
+            $users = User::all();
+            return view('users', compact('users'));
+        }
+        else return redirect('movies');
+        // ->withErrors('Access Denied!');
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
 
     /**
      * Remove the specified resource from storage.

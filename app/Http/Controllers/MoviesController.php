@@ -20,7 +20,6 @@ class MoviesController extends Controller
     {   
         $type = 'movies';
         $movieList = Http::withToken(config('services.tmdb.token'))->get('https://api.themoviedb.org/3/movie/popular?page='.($page))->json()['results'];
-        dump($movieList);
         return view('movies_index', compact('page', 'type', 'movieList'));
     }
 
@@ -33,7 +32,6 @@ class MoviesController extends Controller
     public function show($id)
     {
         $movie = Http::withToken(config('services.tmdb.token'))->get('https://api.themoviedb.org/3/movie/'.$id)->json();
-        dump($movie);
         $isSaved = false;
         if(Auth::user()){
             $user_id = Auth::user()->id;
@@ -44,5 +42,10 @@ class MoviesController extends Controller
             }
         } 
         return view('movies_show', compact('movie', 'isSaved'));
+    }
+
+    public function search(Request $request)
+    {
+        return Http::withToken(config('services.tmdb.token'))->get('https://api.themoviedb.org/3/search/movie?query=' . $request->get('search'))->json()['results'];
     }
 }

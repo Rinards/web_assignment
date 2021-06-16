@@ -13,23 +13,20 @@
          <p>Average score: {{ $movie['vote_average']*10}}%</p>
       </div>
       <div class="mb-5 mr-3 self-end d-flex">
-         @if (Auth::user())
+         @auth
             @if ($isSaved)
-            <p class="font-bold">Added to your List</p>
+            <p class="font-bold">Added to your <a href="/list" class="text-dark underline">List</a></p>
             @else
             <form action="{{ route('listing.create', 'movie') }}" method='post' class="ml-3">
                @csrf
                <button class="p-3 bg-green-400 rounded-md text-dark"name="add" value="{{ $movie['id'] }}">Add to list</button>
             </form>
             @endif
-         <?php 
-         //TODO if user added to list display "Added to list"
-         ?>
-         @else
+         @endauth
+         @guest
          <p>Log in or register to add to your list.</p>
-         @endif
+         @endguest
       </div>
    </div>
 </div>
-
 @endsection

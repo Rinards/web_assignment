@@ -1,7 +1,4 @@
-<?php 
-        $cap = 100;
-?>
-
+<?php $cap = 100; ?>
 <div class="w-100 d-flex flex-row justify-content-around mt-5">
     <ul class="pagination ">
     <li class="page-item">

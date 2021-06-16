@@ -19,29 +19,7 @@ class TvController extends Controller
     {
         $type = 'movies';
         $tvList = Http::withToken(config('services.tmdb.token'))->get('https://api.themoviedb.org/3/tv/popular?page=' . ($page))->json()['results'];
-        dump($tvList);
         return view('tv_index', compact('page', 'type', 'tvList'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -53,7 +31,6 @@ class TvController extends Controller
     public function show($id)
     {
         $tvShow = Http::withToken(config('services.tmdb.token'))->get('https://api.themoviedb.org/3/tv/' . $id)->json();
-        dump($tvShow);
         $isSaved = false;
         if (Auth::user()) {
             $user_id = Auth::user()->id;
@@ -62,44 +39,12 @@ class TvController extends Controller
             foreach ($listings as $listing) {
                 if (MovieListing::where('id', '=', $listing->movie_listing_id)->where('movie_id', '=', $tvShow['id'])->exists()) $isSaved = true;
             }
-
-            dump($listings);
-            dump($isSaved);
         } 
         return view('tv_show', compact('tvShow', 'isSaved'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function search(Request $request)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return Http::withToken(config('services.tmdb.token'))->get('https://api.themoviedb.org/3/search/tv?query=' . $request->get('search'))->json()['results'];
     }
 }

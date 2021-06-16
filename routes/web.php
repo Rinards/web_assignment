@@ -40,11 +40,13 @@ Route::get('users/destroy', [UserController::class, 'destroy'])->name('users.des
 
 // MOVIE ROUTES
 Route::get('movies/{page?}', [MoviesController::class, 'index'])->name('movies');
-Route::get('movie/{id}', [MoviesController::class, 'show']);
+Route::get('movie/{id}', [MoviesController::class, 'show'])->name('movie.show');
+Route::post('movies/{page?}', [MoviesController::class, 'search']);
 
 // TV ROUTES
 Route::get('tv_shows/{page?}', [TvController::class, 'index'])->name('tv_shows');
-Route::get('tv_show/{id}', [TvController::class, 'show']);
+Route::get('tv_show/{id}', [TvController::class, 'show'])->name('tv.show');
+Route::post('tv_shows/{page?}', [TvController::class, 'search']);
 
 // LIST ROUTES
 Route::get('list', [MovieListController::class, 'index'])->name('list');
@@ -57,7 +59,7 @@ Route::post('listing/create/{type}', [MovieListingController::class, 'create'])-
 Route::post('listing/destroy/{listing_id}', [MovieListingController::class, 'destroy'])->name('listing.destroy');
 
 // WATCHING ROUTES
-Route::post('watching/create/{listing_id}', [WatchingController::class, 'create'])->name('watching.create');
+Route::get('watching/create/{listing_id}', [WatchingController::class, 'create'])->name('watching.create');
 Route::post('watching/show/{listing_id}', [WatchingController::class, 'show'])->name('watching.show');
 Route::post('watching/edit/{listing_id}', [WatchingController::class, 'edit'])->name('watching.edit');
 Route::get('watching/destroy/{listing_id}', [WatchingController::class, 'destroy'])->name('watching.destroy');

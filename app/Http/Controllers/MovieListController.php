@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 class MovieListController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -33,7 +37,6 @@ class MovieListController extends Controller
                 $data['list'][$i]['id'] = $listing_id;
                 $i++;
             }
-
         }
         return view('list', compact('data'));
     }
@@ -53,8 +56,6 @@ class MovieListController extends Controller
         $type = $listing->type;
         if($type === 'movie') return redirect()->action([MoviesController::class, 'show'], ['id' => $listing->movie_id]);
         else return redirect()->action([TvController::class, 'show'], ['id' => $listing->movie_id]);
-        
-        //return view('list', compact('list', 'movie'));
     }
 
     /**

@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-white border-b border-gray-100 shadow-xl">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -13,16 +13,12 @@
                     </x-nav-link>
                 </div>
             </div>
-
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
-
-
-                @if(Auth::user())
+                @auth
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                            {{-- <div>{{ Auth::user()->name }}</div> --}}
                             <div>{{Auth::user()->name }}</div>
 
                             <div class="ml-1">
@@ -40,9 +36,11 @@
                             <x-dropdown-link :href="route('list')">
                                 My List
                             </x-dropdown-link>
+                            @can ('is-admin')
                             <x-dropdown-link :href="route('users')">
                                 Manage Users
                             </x-dropdown-link>
+                            @endcan
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
@@ -51,14 +49,12 @@
                         </form>
                     </x-slot>
                 </x-dropdown>
-
-
-                @else
+                @endauth
+                @guest
                 <a href="/login" class="text-dark">Login</a>
                 <a href="/register" class="ml-3 text-dark">Register</a>
-                @endif
+                @endguest
             </div>
-
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
